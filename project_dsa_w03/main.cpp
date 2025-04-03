@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdio>
 #include <cstring>
+#include <algorithm>
 
 using namespace std;
 
@@ -225,7 +226,7 @@ void countingsort_radix(int* a, int n, int exp){
     int count[10]={0};
     for (int i=0; i<n; i++)
     count[(a[i]/exp)%10]++;
-    for (int i=0; i<n; i++)
+    for (int i=1; i<10; i++)
     count[i]+=count[i-1];
     for (int i=n-1; i>=0; i--)
     {
@@ -244,19 +245,17 @@ void radixSort(int* a, int n){
     countingsort_radix(a, n, exp);
 }
 
-void coutingSort(int* a, int n){
+void countingSort(int* a, int n){
     int maxArr=getmax(a, n);
-    int* count=new int[maxArr];
-    for (int i=0; i<n; i++)
-    count[i]=0;
+    int* count=new int[maxArr+1]();
     for (int i=0; i<n; i++)
     count[a[i]]++;
-    for (int i=0; i<maxArr; i++)
+    for (int i=1; i<=maxArr; i++)
     count[i]+=count[i-1];
     int* output=new int[n];
     for (int i=n-1; i>=0; i--)
     {
-        output[count[a[i]]]=a[i];
+        output[count[a[i]]-1]=a[i];
         count[a[i]]--;
     }
     for (int i=0; i<n; i++)
@@ -299,13 +298,21 @@ int main(int argc, char* argv[]){
     {
         heapSort(a, n);
     }
-    else if (algorithm!=NULL && strcmp(algorithm, "merge-sort")==0)
+        else if (algorithm!=NULL && strcmp(algorithm, "merge-sort")==0)
     {
         mergeSort(a,0, n-1);
     }
-    else if (algorithm!=NULL && strcmp(algorithm, "quick-sort")==0)
+        else if (algorithm!=NULL && strcmp(algorithm, "quick-sort")==0)
     {
         quickSort(a,0, n-1);
+    }   
+        else if (algorithm!=NULL && strcmp(algorithm, "radix-sort")==0)
+    {
+        radixSort(a, n);
+    }   
+        else if (algorithm!=NULL && strcmp(algorithm, "counting-sort")==0)
+    {
+        countingSort(a, n);
     }   
     else
     {
