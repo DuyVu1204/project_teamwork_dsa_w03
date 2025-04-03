@@ -4,6 +4,7 @@
 
 using namespace std;
 
+
 void heapify(int* a, int n, int i)
 {
     int max = i;
@@ -24,7 +25,7 @@ void heapify(int* a, int n, int i)
     }
 
 }
-void heap_sort(int* a, int n)
+void heapSort(int* a, int n)
 {
     for (int i = n / 2 - 1; i >= 0; i--)
     {
@@ -36,7 +37,7 @@ void heap_sort(int* a, int n)
         heapify(a, i, 0);
     }
 }
-void insertion_sort(int* a, int n) {
+void insertionSort(int* a, int n) {
     for (int i = 1; i < n; i++)
     {
         int key = a[i];
@@ -50,7 +51,7 @@ void insertion_sort(int* a, int n) {
     }
 }
 
-void selectionsort(int* a, int n){
+void selectionSort(int* a, int n){
     for (int i=0; i<n-1; i++)
     {
         int min=i;
@@ -63,7 +64,7 @@ void selectionsort(int* a, int n){
     }
 }
 
-void bubblesort(int* a, int n){
+void bubbleSort(int* a, int n){
     for (int i=1; i<n; i++)
     {
         for (int j=n-1; j>=i; j--)
@@ -124,7 +125,6 @@ void parse_arguments(int argc, char* argv[], char*& algorithm, char*& input_file
 void shakerSort(int* a, int n) {
     int left = 0, right = n - 1;
     while (left < right) {
-        // Di chuyển từ trái sang phải
         for (int i = left; i < right; i++) {
             if (a[i] > a[i + 1]) {
                 swap(a[i], a[i + 1]);
@@ -132,13 +132,28 @@ void shakerSort(int* a, int n) {
         }
         right--;
 
-        // Di chuyển từ phải sang trái
-        for (int i = right; i > left; i--) {
+        for (int i = right; i > left; i--) {    
             if (a[i] < a[i - 1]) {
                 swap(a[i], a[i - 1]);
             }
         }
         left++;
+    }
+}
+
+void shellSort(int* a, int n){
+    int i, j, interval, temp;
+    for (interval=n/2; interval>0; interval/=2)
+    {
+        for (i=interval; i<n; i++)
+        {
+            temp=a[i];
+            for (j=i; j>=interval && a[j-interval]>temp; j-=interval)
+            {
+                a[j]=a[j-interval];
+            }
+            a[j]=temp;
+        }
     }
 }
 
@@ -152,20 +167,28 @@ int main(int argc, char* argv[]){
     parse_arguments(argc, argv, algorithm, input_file, output_file);
 
     read_input_file(a, n, "input.txt");
-    if (algorithm != nullptr && strcmp(algorithm, "selection-sort") == 0) 
+    if (algorithm != NULL && strcmp(algorithm, "selection-sort") == 0) 
     {
-        selectionsort(a, n);
+        selectionSort(a, n);
     } 
     else if (algorithm!=NULL && strcmp(algorithm, "bubble-sort")==0)
     {
-        bubblesort(a, n);
+        bubbleSort(a, n);
+    }
+    else if (algorithm!=NULL && strcmp(algorithm, "shell-sort")==0)
+    {
+        shellSort(a, n);
+    }
+    else if (algorithm!=NULL && strcmp(algorithm, "shaker-sort")==0)
+    {
+        shakerSort(a, n);
     }
         else if (algorithm!=NULL && strcmp(algorithm, "insertion-sort")==0)
     {
-        insertionsort(a, n);
+        insertionSort(a, n);
     }else if (algorithm!=NULL && strcmp(algorithm, "heap-sort")==0)
     {
-        heapsort(a, n);
+        heapSort(a, n);
     }
     else
     {
