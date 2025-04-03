@@ -74,7 +74,65 @@ void bubbleSort(int* a, int n){
         }
     }
 }
+void merge(int* a, int left, int mid, int right) {
+    int i = left, j = mid + 1, k = 0;
+    int* temp = new int[right - left + 1];
 
+    while (i <= mid && j <= right) {
+        if (a[i] <= a[j]) {
+            temp[k++] = a[i++];
+        }
+        else {
+            temp[k++] = a[j++];
+        }
+    }
+
+    while (i <= mid) {
+        temp[k++] = a[i++];
+    }
+
+    while (j <= right) {  
+        temp[k++] = a[j++];
+    }
+
+    for (int x = 0; x < k; x++) {
+        a[left + x] = temp[x];
+    }
+
+    delete[] temp;
+}
+void mergeSort(int* a, int left, int right) {
+    if (left < right) {
+        int mid = left + (right - left) / 2;
+        mergeSort(a, left, mid);
+        mergeSort(a, mid + 1, right);
+        merge(a, left, mid, right);
+    }
+}
+
+int partition(int arr[], int left, int right) {
+    int randomIndex = left + rand() % (right - left + 1);
+    swap(arr[randomIndex], arr[right]); 
+    int pivot = arr[right];
+    int i = left - 1;
+
+    for (int j = left; j < right; j++) {
+        if (arr[j] < pivot) {
+            i++;
+            swap(arr[i], arr[j]);
+        }
+    }
+    swap(arr[i + 1], arr[right]); 
+    return i + 1;
+}
+void quickSort(int arr[], int left, int right) {
+    if (left < right) {
+        int pi = partition(arr, left, right); 
+
+        quickSort(arr, left, pi - 1); 
+        quickSort(arr, pi + 1, right);
+    }
+}
 void read_input_file(int* &a, int &n,const char *name){
     FILE* f;
     fopen_s(&f, name, "r");
@@ -171,25 +229,34 @@ int main(int argc, char* argv[]){
     {
         selectionSort(a, n);
     } 
-    else if (algorithm!=NULL && strcmp(algorithm, "bubble-sort")==0)
+        else if (algorithm!=NULL && strcmp(algorithm, "bubble-sort")==0)
     {
         bubbleSort(a, n);
     }
-    else if (algorithm!=NULL && strcmp(algorithm, "shell-sort")==0)
+        else if (algorithm!=NULL && strcmp(algorithm, "shell-sort")==0)
     {
         shellSort(a, n);
     }
-    else if (algorithm!=NULL && strcmp(algorithm, "shaker-sort")==0)
+        else if (algorithm!=NULL && strcmp(algorithm, "shaker-sort")==0)
     {
         shakerSort(a, n);
     }
         else if (algorithm!=NULL && strcmp(algorithm, "insertion-sort")==0)
     {
         insertionSort(a, n);
-    }else if (algorithm!=NULL && strcmp(algorithm, "heap-sort")==0)
+    }
+        else if (algorithm!=NULL && strcmp(algorithm, "heap-sort")==0)
     {
         heapSort(a, n);
     }
+    else if (algorithm!=NULL && strcmp(algorithm, "merge-sort")==0)
+    {
+        mergeSort(a,0, n-1);
+    }
+    else if (algorithm!=NULL && strcmp(algorithm, "quick-sort")==0)
+    {
+        quickSort(a,0, n-1);
+    }   
     else
     {
         cout << "Algorithm not specified or not recognized!" << endl;  
