@@ -215,6 +215,56 @@ void shellSort(int* a, int n){
     }
 }
 
+int getmax(int* a, int n){
+    return *max_element(a, a+n);
+}
+
+void countingsort_radix(int* a, int n, int exp){
+    int* output; 
+    output=new int[n];
+    int count[10]={0};
+    for (int i=0; i<n; i++)
+    count[(a[i]/exp)%10]++;
+    for (int i=0; i<n; i++)
+    count[i]+=count[i-1];
+    for (int i=n-1; i>=0; i--)
+    {
+        int digit=(a[i]/exp)%10;
+        output[count[digit]-1]=a[i];
+        count[digit]--;
+    }
+    for (int i=0; i<n; i++)
+    a[i]=output[i];
+    delete[]output;
+}
+
+void radixSort(int* a, int n){
+    int maxNum=getmax(a,n);
+    for (int exp=1; maxNum/exp>0; exp*=10)
+    countingsort_radix(a, n, exp);
+}
+
+void coutingSort(int* a, int n){
+    int maxArr=getmax(a, n);
+    int* count=new int[maxArr];
+    for (int i=0; i<n; i++)
+    count[i]=0;
+    for (int i=0; i<n; i++)
+    count[a[i]]++;
+    for (int i=0; i<maxArr; i++)
+    count[i]+=count[i-1];
+    int* output=new int[n];
+    for (int i=n-1; i>=0; i--)
+    {
+        output[count[a[i]]]=a[i];
+        count[a[i]]--;
+    }
+    for (int i=0; i<n; i++)
+    a[i]=output[i];
+    delete[]count;
+    delete[]output;
+}
+
 int main(int argc, char* argv[]){
     int* a, n;
 
