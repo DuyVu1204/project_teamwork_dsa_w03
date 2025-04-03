@@ -75,6 +75,27 @@ void parse_arguments(int argc, char* argv[], char*& algorithm, char*& input_file
     }
 }
 
+void shakerSort(int* a, int n) {
+    int left = 0, right = n - 1;
+    while (left < right) {
+        // Di chuyển từ trái sang phải
+        for (int i = left; i < right; i++) {
+            if (a[i] > a[i + 1]) {
+                swap(a[i], a[i + 1]);
+            }
+        }
+        right--;
+
+        // Di chuyển từ phải sang trái
+        for (int i = right; i > left; i--) {
+            if (a[i] < a[i - 1]) {
+                swap(a[i], a[i - 1]);
+            }
+        }
+        left++;
+    }
+}
+
 int main(int argc, char* argv[]){
     int* a, n;
 
